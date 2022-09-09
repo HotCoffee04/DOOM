@@ -177,7 +177,7 @@ void I_Error (char *error, ...)
 	G_CheckDemoStatus();
 
     D_QuitNetGame ();
-    I_ShutdownGraphics();
+    I_ShutdownGraphics(); //this line seg-faults
     
     exit(-1);
 }

@@ -302,9 +302,10 @@ void W_InitMultipleFiles (char** filenames)
     for ( ; *filenames ; filenames++)
 	W_AddFile (*filenames);
 
+
     if (!numlumps)
 	I_Error ("W_InitFiles: no files found");
-    
+
     // set up caching
     size = numlumps * sizeof(*lumpcache);
     lumpcache = malloc (size);
@@ -313,6 +314,8 @@ void W_InitMultipleFiles (char** filenames)
 	I_Error ("Couldn't allocate lumpcache");
 
     memset (lumpcache,0, size);
+
+
 }
 
 
