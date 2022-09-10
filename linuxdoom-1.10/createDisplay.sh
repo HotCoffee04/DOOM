@@ -1,2 +1,0 @@
-sudo Xephyr :2 -ac -screen 960x600x8
-
