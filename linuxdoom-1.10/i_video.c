@@ -56,6 +56,49 @@ SDL_Event sdlEvent;
 SDL_Texture *texture;
 SDL_Palette *sdlPalette;
 
+float forcedRatio;
+float ratio;
+float winScale;
+int yoffset;
+int xoffset;
+SDL_Rect imgRect;
+
+void resizedWindow(){
+
+	int nx,ny;
+	SDL_GetWindowSize(win,&nx,&ny);
+	int sx,sy;
+
+	ratio = (float)nx / ny;
+
+	xoffset = yoffset = 0;
+
+	if(ratio > forcedRatio){
+
+		winScale = (float)ny/SCREENHEIGHT;
+
+		sx = (SCREENHEIGHT*forcedRatio) * winScale;
+		sy = SCREENHEIGHT * winScale;
+
+
+		xoffset = nx / 2 - ( sx/2);
+	}else{
+
+		winScale = (float)nx / (float)SCREENWIDTH;
+
+		sx = SCREENWIDTH * winScale;
+		sy = (SCREENWIDTH / forcedRatio) * winScale;
+
+
+		yoffset = ny / 2 - ( sy/2);
+	}
+
+	imgRect.x = xoffset;
+	imgRect.y = yoffset;
+	imgRect.h = sy;
+	imgRect.w = sx;
+	printf("sx:%d sy:%d\n",sx,sy);
+}
 
 int SdlKeyToDoomKey(SDL_Keysym key){
 
@@ -121,6 +164,14 @@ void I_InitGraphics(void)
 	texture = SDL_CreateTexture(rend,SDL_PIXELFORMAT_RGB332,SDL_TEXTUREACCESS_STREAMING,SCREENWIDTH,SCREENHEIGHT);
 	surface = SDL_CreateRGBSurface(0,SCREENWIDTH,SCREENHEIGHT,8,0,0,0,0);
 
+	//runs doom with a stretched 4:3 aspect ratio like the one monitors had in the 90s
+    if (M_CheckParm("-ogRatio"))
+		forcedRatio = 1.33333f;
+	else
+		forcedRatio = 1.6f;
+
+
+	resizedWindow();
 }
 
 
@@ -169,6 +220,15 @@ void I_StartTic (void)
 			if(doomEvent.data1 != -1)
 			D_PostEvent(&doomEvent);
 		break;
+
+		//resize sdl window
+		case SDL_WINDOWEVENT:
+			switch(sdlEvent.window.event){
+				case SDL_WINDOWEVENT_RESIZED:
+					resizedWindow();
+				break;
+			}
+			break;
         }
     }
 
@@ -196,7 +256,7 @@ void I_FinishUpdate (void)
 
 	texture = SDL_CreateTextureFromSurface(rend,surface);
 
-	SDL_RenderCopy(rend,texture,0,0);
+	SDL_RenderCopy(rend,texture,0,&imgRect);
 
 	SDL_DestroyTexture(texture);
 
