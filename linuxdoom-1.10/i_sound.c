@@ -72,6 +72,7 @@ typedef struct chunk_n{ //chunk node
 
 chunk_n sounds[CHUNK_BUFFER_SIZE]; //chunk circular buffer
 Mix_Music *music;
+SDL_RWops *rwops;
 chunk_n *cpoint;
 
 #define SPECIAL_SOUNDS_NUMBER 6
@@ -124,7 +125,7 @@ I_StartSound
   }
 
   //check if sound is already playing
-  if(special)
+  //if(special)
   for(int i = 0; i < CHUNK_BUFFER_SIZE; i++){
     if(sounds[i].sfxid == id){
       Mix_HaltChannel(sounds[i].id);  //stop the special sound
@@ -139,12 +140,12 @@ I_StartSound
   if(id == sfx_sawful || id == sfx_sawidl){ //if it's the saw sound we just load a forth of the data for some reasons beyond my understanding
 
     cpoint->chunk->alen = W_LumpLength(S_sfx[id].lumpnum) / 4;
-    cpoint->chunk->abuf = (W_CacheLumpNum(S_sfx[id].lumpnum,PU_CACHE) + 8); 
+    cpoint->chunk->abuf = (W_CacheLumpNum(S_sfx[id].lumpnum,PU_CACHE) + 32); 
 
 
   }else{
-    cpoint->chunk->abuf = (W_CacheLumpNum(S_sfx[id].lumpnum,PU_CACHE) + 8); 
-    cpoint->chunk->alen = W_LumpLength(S_sfx[id].lumpnum) - 8;
+    cpoint->chunk->abuf = (W_CacheLumpNum(S_sfx[id].lumpnum,PU_CACHE) + 32); 
+    cpoint->chunk->alen = W_LumpLength(S_sfx[id].lumpnum) - 32;
   }
 
   cpoint->sfxid = id;
@@ -278,9 +279,6 @@ void I_ShutdownMusic(void)	{ }
 
 void I_PlaySong(int handle, int looping)
 {
-
-  //printf("I_PlaySong()\n");
-  //Mix_PlayMusic(music, -1);
   // UNUSED.
   //if(Mix_PlayChannel(-1,music,-1) == -1)
   //printf("Music Error %s\n",Mix_GetError());
@@ -319,9 +317,7 @@ void I_UnRegisterSong(int handle)
 
 int I_RegisterSong(void* data)
 {
-  //printf("I_RegisterSong()\n");
-  //music = Mix_LoadMUS("test.mid");
-  //printf("Music Error %s\n",Mix_GetError());
+
   return 1;
 }
 
