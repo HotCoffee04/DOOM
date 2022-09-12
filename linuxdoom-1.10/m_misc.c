@@ -207,11 +207,7 @@ extern int	showMessages;
 extern	int	numChannels;
 
 
-// UNIX hack, to be removed.
-#ifdef SNDSERV
-extern char*	sndserver_filename;
-extern int	mb_used;
-#endif
+
 
 #ifdef LINUX
 char*		mousetype;
@@ -254,10 +250,7 @@ default_t	defaults[] =
 
 // UNIX hack, to be removed. 
 
-#ifdef SNDSERV
-    {"sndserver", (int *) &sndserver_filename, (long long int) "sndserver"},
-    {"mb_used", &mb_used, 2},
-#endif
+
     
 #endif
 

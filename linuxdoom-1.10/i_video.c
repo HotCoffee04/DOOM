@@ -56,6 +56,8 @@ SDL_Event sdlEvent;
 SDL_Texture *texture;
 SDL_Palette *sdlPalette;
 
+int lastMouseX,lastMouseY;
+
 float forcedRatio;
 float ratio;
 float winScale;
@@ -97,7 +99,6 @@ void resizedWindow(){
 	imgRect.y = yoffset;
 	imgRect.h = sy;
 	imgRect.w = sx;
-	printf("sx:%d sy:%d\n",sx,sy);
 }
 
 int SdlKeyToDoomKey(SDL_Keysym key){
@@ -158,7 +159,7 @@ int SdlKeyToDoomKey(SDL_Keysym key){
 
 void I_InitGraphics(void)
 {
-	SDL_Init(SDL_INIT_EVERYTHING);
+	SDL_Init(SDL_INIT_VIDEO);
 	win = SDL_CreateWindow("Doom",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_RESIZABLE);
 	rend = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 	texture = SDL_CreateTexture(rend,SDL_PIXELFORMAT_RGB332,SDL_TEXTUREACCESS_STREAMING,SCREENWIDTH,SCREENHEIGHT);
@@ -170,6 +171,17 @@ void I_InitGraphics(void)
 	else
 		forcedRatio = 1.6f;
 
+    if (M_CheckParm("-fullscreen")){
+
+		SDL_DisplayMode DM;
+		SDL_GetCurrentDisplayMode(0, &DM);
+
+		SDL_SetWindowSize(win,&DM.w,&DM.h);
+
+		SDL_SetWindowFullscreen(win,SDL_WINDOW_FULLSCREEN_DESKTOP);
+
+
+	}
 
 	resizedWindow();
 }
@@ -220,7 +232,12 @@ void I_StartTic (void)
 			if(doomEvent.data1 != -1)
 			D_PostEvent(&doomEvent);
 		break;
+		case SDL_MOUSEMOTION:
+			doomEvent.type = ev_mouse;
 
+
+
+		break;
 		//resize sdl window
 		case SDL_WINDOWEVENT:
 			switch(sdlEvent.window.event){
@@ -263,6 +280,8 @@ void I_FinishUpdate (void)
 
 	SDL_RenderPresent(rend);
 
+	SDL_Delay(1000 / 60);
+
 }
 
 
@@ -282,11 +301,11 @@ void I_SetPalette (byte* palette)
 {
 
 	SDL_FreePalette(sdlPalette);
-	sdlPalette = SDL_AllocPalette(255);
+	sdlPalette = SDL_AllocPalette(256);
 
 	byte *p = palette;
 
-	for(int i = 0; i < 255; i++,p+=3){
+	for(int i = 0; i <= 255; i++,p+=3){
 
 		sdlPalette->colors[i].r = *p;
 		sdlPalette->colors[i].g = *(p + 1);

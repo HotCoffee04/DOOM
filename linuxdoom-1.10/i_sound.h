@@ -23,14 +23,10 @@
 #ifndef __I_SOUND__
 #define __I_SOUND__
 
-#include "doomdef.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
-// UNIX hack, to be removed.
-#ifdef SNDSERV
-#include <stdio.h>
-extern FILE* sndserver;
-extern char* sndserver_filename;
-#endif
+#include "doomdef.h"
 
 #include "doomstat.h"
 #include "sounds.h"
