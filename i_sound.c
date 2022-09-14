@@ -83,13 +83,11 @@ int specialSounds[] = {sfx_sawup,sfx_sawidl,sfx_sawful,sfx_sawhit,sfx_stnmov,sfx
 
 void I_SetChannels()
 {
-
 }	
 
  
 void I_SetSfxVolume(int volume)
 {
-
 }
 
 //
@@ -299,14 +297,14 @@ void I_PauseSong (int handle)
 
 void I_ResumeSong (int handle)
 {
-  //printf("I_ResumeSong()\n");
+
   // UNUSED.
   handle = 0;
 }
 
 void I_StopSong(int handle)
 {
-  //printf("I_StopSong()\n");
+
   Mix_HaltMusic();
   handle = 0;
 }

@@ -160,13 +160,13 @@ int SdlKeyToDoomKey(SDL_Keysym key){
 void I_InitGraphics(void)
 {
 	SDL_Init(SDL_INIT_VIDEO);
-	win = SDL_CreateWindow("Doom",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_RESIZABLE);
+	win = SDL_CreateWindow("Coffee Doom",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_RESIZABLE);
 	rend = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
-	texture = SDL_CreateTexture(rend,SDL_PIXELFORMAT_RGB332,SDL_TEXTUREACCESS_STREAMING,SCREENWIDTH,SCREENHEIGHT);
+	//texture = SDL_CreateTexture(rend,SDL_PIXELFORMAT_RGB332,SDL_TEXTUREACCESS_STREAMING,SCREENWIDTH,SCREENHEIGHT);
 	surface = SDL_CreateRGBSurface(0,SCREENWIDTH,SCREENHEIGHT,8,0,0,0,0);
 
 	//runs doom with a stretched 4:3 aspect ratio like the one monitors had in the 90s
-    if (M_CheckParm("-ogRatio"))
+    if (M_CheckParm("-no_stretch"))
 		forcedRatio = 1.33333f;
 	else
 		forcedRatio = 1.6f;
@@ -190,6 +190,7 @@ void I_InitGraphics(void)
 
 void I_ShutdownGraphics(void)
 {
+	SDL_FreeSurface(surface);
 	SDL_ShowCursor(1);
 	SDL_Quit();
 }
@@ -225,12 +226,14 @@ void I_StartTic (void)
         case SDL_KEYDOWN:
 			doomEvent.type = ev_keydown;
 			doomEvent.data1 = SdlKeyToDoomKey(sdlEvent.key.keysym);
+			doomEvent.data2 = doomEvent.data3 = 0;
 			if(doomEvent.data1 != -1)
 			D_PostEvent(&doomEvent);
 		break;
         case SDL_KEYUP:
 			doomEvent.type = ev_keyup;
 			doomEvent.data1 = SdlKeyToDoomKey(sdlEvent.key.keysym);
+			doomEvent.data2 = doomEvent.data3 = 0;
 			if(doomEvent.data1 != -1)
 			D_PostEvent(&doomEvent);
 		break;
@@ -238,6 +241,7 @@ void I_StartTic (void)
 			doomEvent.type = ev_mouse;
 			doomEvent.data2 = sdlEvent.motion.xrel * 40;
 			doomEvent.data3 = sdlEvent.motion.yrel * 40;
+			doomEvent.data1 = 0;
 			D_PostEvent(&doomEvent);
 
 			//wrap mouse around window

@@ -318,7 +318,7 @@ void M_SaveDefaults (void)
 	    fprintf (f,"%s\t\t%i\n",defaults[i].name,v);
 	} else {
 	    fprintf (f,"%s\t\t\"%s\"\n",defaults[i].name,
-		     * (char **) (defaults[i].location));
+		      (char *) (defaults[i].location));
 	}
     }
 	
