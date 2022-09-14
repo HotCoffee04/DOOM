@@ -182,13 +182,15 @@ void I_InitGraphics(void)
 
 
 	}
-
+	SDL_WarpMouseInWindow(win,100,100);
 	resizedWindow();
+	SDL_ShowCursor(0);
 }
 
 
 void I_ShutdownGraphics(void)
 {
+	SDL_ShowCursor(1);
 	SDL_Quit();
 }
 
@@ -234,8 +236,31 @@ void I_StartTic (void)
 		break;
 		case SDL_MOUSEMOTION:
 			doomEvent.type = ev_mouse;
+			doomEvent.data2 = sdlEvent.motion.xrel * 40;
+			doomEvent.data3 = sdlEvent.motion.yrel * 40;
+			D_PostEvent(&doomEvent);
 
+			//wrap mouse around window
+			int sx,sy,cx,cy;
+			int move = 0;
+			SDL_GetWindowSize(win,&sx,&sy);
+			SDL_GetMouseState(&cx,&cy);
 
+			if(cx > sx - 2){
+				cx = 1;	move = 1;
+			}
+			if(cx <= 0){
+				cx = sx - 3; move = 1;
+			}
+			if(cy > sy - 2){
+				cy = 1; move = 1;
+			}
+			if(cy <= 0){
+				cy = sy - 3; move = 1;
+			}
+			//printf("%d %d (%d %d)\n",cx,cy,sx,sy);
+			if(move)
+			SDL_WarpMouseInWindow(win,cx,cy);
 
 		break;
 		//resize sdl window
@@ -249,6 +274,9 @@ void I_StartTic (void)
         }
     }
 
+	
+
+	
 }
 
 
@@ -280,7 +308,7 @@ void I_FinishUpdate (void)
 
 	SDL_RenderPresent(rend);
 
-	SDL_Delay(1000 / 60);
+	SDL_Delay(1000 / 35);
 
 }
 
