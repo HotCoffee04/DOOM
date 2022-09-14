@@ -662,7 +662,7 @@ S_ChangeMusic
 
     // load & register it
     music->data = (void *) W_CacheLumpNum(music->lumpnum, PU_MUSIC);
-    music->handle = I_RegisterSong(music->data);
+    music->handle = I_RegisterSong(musicnum);
 
     // play it
     I_PlaySong(music->handle, looping);

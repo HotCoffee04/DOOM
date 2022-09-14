@@ -53,6 +53,8 @@ rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
 
 #include "doomdef.h"
 
+#include "music.h"
+
 #define CHUNK_BUFFER_SIZE 8 //number of sounds that can be played at the same time AKA number of channels
 
 // Get the interrupt. Set duration in millisecs.
@@ -125,7 +127,7 @@ I_StartSound
   }
 
   //check if sound is already playing
-  //if(special)
+  if(special)
   for(int i = 0; i < CHUNK_BUFFER_SIZE; i++){
     if(sounds[i].sfxid == id){
       Mix_HaltChannel(sounds[i].id);  //stop the special sound
@@ -269,9 +271,8 @@ I_InitSound()
 
 //
 // MUSIC API.
-// Still no music done.
-// Remains. Dummies.
-//
+// 
+
 void I_InitMusic(void)		{ }
 void I_ShutdownMusic(void)	{ }
 
@@ -279,9 +280,11 @@ void I_ShutdownMusic(void)	{ }
 
 void I_PlaySong(int handle, int looping)
 {
-  // UNUSED.
-  //if(Mix_PlayChannel(-1,music,-1) == -1)
-  //printf("Music Error %s\n",Mix_GetError());
+  if(music == 0)
+    return;
+
+  if(Mix_PlayMusic(music,-1) == -1)
+  printf("Music Error %s\n",Mix_GetError());
 }
 
 void I_PauseSong (int handle)
@@ -304,7 +307,7 @@ void I_ResumeSong (int handle)
 void I_StopSong(int handle)
 {
   //printf("I_StopSong()\n");
-  // UNUSED.
+  Mix_HaltMusic();
   handle = 0;
 }
 
@@ -315,8 +318,58 @@ void I_UnRegisterSong(int handle)
   handle = 0;
 }
 
-int I_RegisterSong(void* data)
+int I_RegisterSong(int musicnum)
 {
+
+  unsigned char *p = 0;
+  int size;
+  switch(musicnum){
+
+    case mus_bunny: p = D_BUNNY; size = 8028; break;
+    case mus_e1m1: p = D_E1M1; size = 23322; break;
+    case mus_e1m2: p = D_E1M2; size = 43405; break;
+    case mus_e1m3: p = D_E1M3; size = 30047; break;
+    case mus_e1m4: p = D_E1M4; size = 25096; break;
+    case mus_e1m5: p = D_E1M5; size = 13094; break;
+    case mus_e1m6: p = D_E1M6; size = 13341; break;
+    case mus_e1m7: p = D_E1M7; size = 11351; break;
+    case mus_e1m8: p = D_E1M8; size = 72467; break;
+    case mus_e1m9: p = D_E1M9; size = 31075; break;
+    //case mus_intro: p = D_INTRO; size = 2002; break; //the intro sounds too bad to be played
+    case mus_inter: p = D_INTER; size = 39553; break;
+    //case mus_introa: p = D_INTROA; size = 871; break;
+    case mus_victor: p = D_VICTOR; size = 18147; break;
+
+    case mus_e2m1: p = D_E2M1; size = 36439; break;
+    case mus_e2m2: p = D_E2M2; size = 28798; break;
+    case mus_e2m3: p = D_E2M3; size = 39556; break;
+    case mus_e2m4: p = D_E2M4; size = 11092; break;
+    case mus_e2m5: p = D_E2M5; size = 11351; break;
+    case mus_e2m6: p = D_E2M6; size = 13224; break;
+    case mus_e2m7: p = D_E2M7; size = 8522; break;
+    case mus_e2m8: p = D_E2M8; size = 55610; break;
+    case mus_e2m9: p = D_E2M9; size = 21681; break;
+
+    case mus_e3m1: p = D_E3M1; size = 21681; break;
+    case mus_e3m2: p = D_E3M2; size = 24868; break;
+    case mus_e3m3: p = D_E3M3; size = 40458; break;
+    case mus_e3m4: p = D_E3M4; size = 72467; break;
+    case mus_e3m5: p = D_E3M5; size = 11359; break;
+    case mus_e3m6: p = D_E3M6; size = 13341; break;
+    case mus_e3m7: p = D_E3M7; size = 8522; break;
+    case mus_e3m8: p = D_E3M8; size = 24271; break;
+    case mus_e3m9: p = D_E3M9; size = 31083; break;
+
+    default: break;
+  }
+
+  if(p == 0){
+    music = 0;
+    return 1;
+  }
+
+  rwops = SDL_RWFromMem(p,size);
+  music = Mix_LoadMUSType_RW(rwops,MUS_MID,1);
 
   return 1;
 }
