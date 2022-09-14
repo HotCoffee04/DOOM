@@ -103,14 +103,14 @@ int I_GetSfxLumpNum(sfxinfo_t* sfx)
 
 void I_SetMusicVolume(int volume)
 {
-
+  Mix_VolumeMusic(volume * 8);
 }
 
 
 int
 I_StartSound
 ( int		id,
-  int		vol,
+  int		vol, // 0 - 15 (inclusive) 
   int		sep,
   int		pitch,
   int		priority )
@@ -135,7 +135,7 @@ I_StartSound
   //allocates new sound
   cpoint->chunk = malloc(sizeof(Mix_Chunk));
   cpoint->chunk->allocated = 1;
-  cpoint->chunk->volume = vol * 16 - 1;
+  cpoint->chunk->volume = vol * 8;
 
   if(id == sfx_sawful || id == sfx_sawidl){ //if it's the saw sound we just load a forth of the data for some reasons beyond my understanding
 

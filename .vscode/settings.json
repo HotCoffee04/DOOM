@@ -10,6 +10,8 @@
         "limits": "c",
         "numeric": "c",
         "streambuf": "c",
-        "functional": "c"
+        "functional": "c",
+        "i_sound.h": "c",
+        "doomdef.h": "c"
     }
 }
