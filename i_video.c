@@ -143,6 +143,8 @@ int SdlKeyToDoomKey(SDL_Keysym key){
 	
 		case SDL_SCANCODE_0: return '0';
 
+		case SDL_SCANCODE_COMMA: return ',';
+		case SDL_SCANCODE_PERIOD: return '.';
 
 		default:
 		if(key.scancode >= SDL_SCANCODE_A && key.scancode <= SDL_SCANCODE_Z)
@@ -171,6 +173,7 @@ void I_InitGraphics(void)
 	else
 		forcedRatio = 1.6f;
 
+
     if (M_CheckParm("-fullscreen")){
 
 		SDL_DisplayMode DM;
@@ -180,7 +183,8 @@ void I_InitGraphics(void)
 
 		SDL_SetWindowFullscreen(win,SDL_WINDOW_FULLSCREEN_DESKTOP);
 
-
+	}else{
+		SDL_MaximizeWindow(win);
 	}
 	SDL_WarpMouseInWindow(win,100,100);
 	resizedWindow();
