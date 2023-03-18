@@ -92,14 +92,14 @@ void D_DoomLoop (void);
 char*		wadfiles[MAXWADFILES];
 
 
-boolean		devparm;	// started game with -devparm
-boolean         nomonsters;	// checkparm of -nomonsters
-boolean         respawnparm;	// checkparm of -respawn
-boolean         fastparm;	// checkparm of -fast
+d_boolean		devparm;	// started game with -devparm
+d_boolean         nomonsters;	// checkparm of -nomonsters
+d_boolean         respawnparm;	// checkparm of -respawn
+d_boolean         fastparm;	// checkparm of -fast
 
-boolean         drone;
+d_boolean         drone;
 
-boolean		singletics = false; // debug flag to cancel adaptiveness
+d_boolean		singletics = false; // debug flag to cancel adaptiveness
 
 
 
@@ -107,16 +107,16 @@ boolean		singletics = false; // debug flag to cancel adaptiveness
 //extern  int	sfxVolume;
 //extern  int	musicVolume;
 
-extern  boolean	inhelpscreens;
+extern  d_boolean	inhelpscreens;
 
 skill_t		startskill;
 int             startepisode;
 int		startmap;
-boolean		autostart;
+d_boolean		autostart;
 
 FILE*		debugfile;
 
-boolean		advancedemo;
+d_boolean		advancedemo;
 
 
 
@@ -186,25 +186,25 @@ void D_ProcessEvents (void)
 
 // wipegamestate can be set to -1 to force a wipe on the next draw
 gamestate_t     wipegamestate = GS_DEMOSCREEN;
-extern  boolean setsizeneeded;
+extern  d_boolean setsizeneeded;
 extern  int             showMessages;
 void R_ExecuteSetViewSize (void);
 
 void D_Display (void)
 {
-    static  boolean		viewactivestate = false;
-    static  boolean		menuactivestate = false;
-    static  boolean		inhelpscreensstate = false;
-    static  boolean		fullscreen = false;
+    static  d_boolean		viewactivestate = false;
+    static  d_boolean		menuactivestate = false;
+    static  d_boolean		inhelpscreensstate = false;
+    static  d_boolean		fullscreen = false;
     static  gamestate_t		oldgamestate = -1;
     static  int			borderdrawcount;
     int				nowtime;
     int				tics;
     int				wipestart;
     int				y;
-    boolean			done;
-    boolean			wipe;
-    boolean			redrawsbar;
+    d_boolean			done;
+    d_boolean			wipe;
+    d_boolean			redrawsbar;
 
     if (nodrawers)
 	return;                    // for comparative timing / profiling
@@ -349,7 +349,7 @@ void D_Display (void)
 //
 //  D_DoomLoop
 //
-extern  boolean         demorecording;
+extern  d_boolean         demorecording;
 
 void D_DoomLoop (void)
 {
@@ -572,47 +572,56 @@ void IdentifyVersion (void)
     char*	plutoniawad;
     char*	tntwad;
 
-#ifdef NORMALUNIX
-    char *home;
-    char *doomwaddir;
-    doomwaddir = getenv("DOOMWADDIR");
-    if (!doomwaddir)
-	doomwaddir = ".";
+	char* home;
+	char* doomwaddir;
 
-    // Commercial.
-    doom2wad = malloc(strlen(doomwaddir)+1+9+1);
-    sprintf(doom2wad, "%s/doom2.wad", doomwaddir);
+	doomwaddir = getenv("DOOMWADDIR");
 
-    // Retail.
-    doomuwad = malloc(strlen(doomwaddir)+1+9+1);
-    sprintf(doomuwad, "%s/doomu.wad", doomwaddir);
-    
-    // Registered.
-    doomwad = malloc(strlen(doomwaddir)+1+8+1);
-    sprintf(doomwad, "%s/doom.wad", doomwaddir);
-    
-    // Shareware.
-    doom1wad = malloc(strlen(doomwaddir)+1+9+1);
-    sprintf(doom1wad, "%s/doom1.wad", doomwaddir);
+	if (!doomwaddir)
+		doomwaddir = ".";
 
-     // Bug, dear Shawn.
-    // Insufficient malloc, caused spurious realloc errors.
-    plutoniawad = malloc(strlen(doomwaddir)+1+/*9*/12+1);
-    sprintf(plutoniawad, "%s/plutonia.wad", doomwaddir);
+	// Commercial.
+	doom2wad = malloc(strlen(doomwaddir) + 1 + 9 + 1);
+	sprintf(doom2wad, "%s/doom2.wad", doomwaddir);
 
-    tntwad = malloc(strlen(doomwaddir)+1+9+1);
-    sprintf(tntwad, "%s/tnt.wad", doomwaddir);
+	// Retail.
+	doomuwad = malloc(strlen(doomwaddir) + 1 + 9 + 1);
+	sprintf(doomuwad, "%s/doomu.wad", doomwaddir);
+
+	// Registered.
+	doomwad = malloc(strlen(doomwaddir) + 1 + 8 + 1);
+	sprintf(doomwad, "%s/doom.wad", doomwaddir);
+
+	// Shareware.
+	doom1wad = malloc(strlen(doomwaddir) + 1 + 9 + 1);
+	sprintf(doom1wad, "%s/doom1.wad", doomwaddir);
+
+	// Bug, dear Shawn.
+   // Insufficient malloc, caused spurious realloc errors.
+	plutoniawad = malloc(strlen(doomwaddir) + 1 +/*9*/12 + 1);
+	sprintf(plutoniawad, "%s/plutonia.wad", doomwaddir);
+
+	tntwad = malloc(strlen(doomwaddir) + 1 + 9 + 1);
+	sprintf(tntwad, "%s/tnt.wad", doomwaddir);
 
 
-    // French stuff.
-    doom2fwad = malloc(strlen(doomwaddir)+1+10+1);
-    sprintf(doom2fwad, "%s/doom2f.wad", doomwaddir);
+	// French stuff.
+	doom2fwad = malloc(strlen(doomwaddir) + 1 + 10 + 1);
+	sprintf(doom2fwad, "%s/doom2f.wad", doomwaddir);
 
-    home = getenv("HOME");
-    if (!home)
-      I_Error("Please set $HOME to your home directory");
-    sprintf(basedefault, "%s/.doomrc", home);
-#endif
+	#ifdef LINUX
+		home = getenv("HOME");
+	#else
+		home = getenv("userprofile");
+	#endif
+
+
+	if (!home)
+		I_Error("Please set $HOME to your home directory");
+	sprintf(basedefault, "%s/.doomrc", home);
+
+	///////////////////////
+
 
     if (M_CheckParm ("-shdev"))
     {

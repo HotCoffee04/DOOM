@@ -29,8 +29,10 @@ rcsid[] = "$Id: m_argv.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 int		myargc;
 char**		myargv;
 
-
-
+#ifndef LINUX
+//substitute for unix function:
+#define strcasecmp(x,y) _stricmp(x,y)
+#endif
 
 //
 // M_CheckParm

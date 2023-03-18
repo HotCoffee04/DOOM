@@ -280,8 +280,7 @@ typedef enum
 #define KEY_LALT	KEY_RALT
 
 
-
-// DOOM basic types (boolean),
+// DOOM basic types (d_boolean),
 //  and max/min values.
 //#include "doomtype.h"
 

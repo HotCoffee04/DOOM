@@ -43,13 +43,13 @@ rcsid[] = "$Id: r_segs.c,v 1.3 1997/01/29 20:10:19 b1 Exp $";
 // OPTIMIZE: closed two sided lines as single sided
 
 // True if any of the segs textures might be visible.
-boolean		segtextured;	
+d_boolean		segtextured;	
 
 // False if the back side is the same plane.
-boolean		markfloor;	
-boolean		markceiling;
+d_boolean		markfloor;	
+d_boolean		markceiling;
 
-boolean		maskedtexture;
+d_boolean		maskedtexture;
 int		toptexture;
 int		bottomtexture;
 int		midtexture;

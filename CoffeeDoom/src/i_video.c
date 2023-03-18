@@ -25,19 +25,14 @@ static const char
 rcsid[] = "$Id: i_x.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
 
 #include <stdlib.h>
-#include <unistd.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
 #include <stdarg.h>
-#include <sys/time.h>
 #include <sys/types.h>
-#include <sys/socket.h>
 
-#include <netinet/in.h>
+
 #include <errno.h>
 #include <signal.h>
 
@@ -178,7 +173,7 @@ int SdlKeyToDoomKey(SDL_Keysym key){
 void I_InitGraphics(void)
 {
 	SDL_Init(SDL_INIT_VIDEO);
-	win = SDL_CreateWindow("Coffee Doom",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_RESIZABLE);
+	win = SDL_CreateWindow("Coffee Doom",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,SCREENWIDTH*3, SCREENHEIGHT*3, SDL_WINDOW_RESIZABLE);
 	rend = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 	//texture = SDL_CreateTexture(rend,SDL_PIXELFORMAT_RGB332,SDL_TEXTUREACCESS_STREAMING,SCREENWIDTH,SCREENHEIGHT);
 	surface = SDL_CreateRGBSurface(0,SCREENWIDTH,SCREENHEIGHT,8,0,0,0,0);
@@ -205,7 +200,7 @@ void I_InitGraphics(void)
 		SDL_SetWindowFullscreen(win,SDL_WINDOW_FULLSCREEN_DESKTOP);
 
 	}else{
-		SDL_MaximizeWindow(win);
+		//SDL_MaximizeWindow(win);
 	}
 	SDL_WarpMouseInWindow(win,100,100);
 	resizedWindow();
@@ -364,8 +359,6 @@ void I_FinishUpdate (void)
 
 	if(drawBlocks){
 		SDL_SetRenderDrawColor(rend,52, 222, 235, SDL_ALPHA_OPAQUE);
-
-		C_DrawBlockmap(rend,0,0,0);
 
 		SDL_SetRenderDrawColor(rend,0, 0, 0, SDL_ALPHA_OPAQUE);
 	}

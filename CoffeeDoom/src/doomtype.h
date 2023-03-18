@@ -31,7 +31,7 @@
 #ifdef __cplusplus
 typedef bool boolean;
 #else
-typedef enum {false, true} boolean;
+typedef enum {false, true} d_boolean;
 #endif
 typedef unsigned char byte;
 #endif
@@ -55,9 +55,11 @@ typedef unsigned char byte;
 #define MINLONG		((long)0x80000000)
 #endif
 
-
-
-
+// Substitutes for unix header defines:
+#define	R_OK	4		/* Test for read permission.  */
+#define O_RDONLY	0
+#define O_WRONLY	1
+#define	O_BINARY	0x8000
 #endif
 //-----------------------------------------------------------------------------
 //

@@ -46,10 +46,14 @@ rcsid[] = "$Id: r_data.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 #ifdef LINUX
 #include  <alloca.h>
 #endif
-
+#include <malloc.h>
 
 #include "r_data.h"
 
+#ifndef LINUX
+//substitues for unix function:
+#define strncasecmp(x,y,z) _strnicmp(x,y,z)
+#endif
 //
 // Graphics.
 // DOOM graphics for walls and sprites
@@ -86,7 +90,7 @@ typedef struct
 typedef struct
 {
     char		name[8];
-    boolean		masked;	
+    d_boolean		masked;	
     short		width;
     short		height;
     int			columndirectory;	// OBSOLETE

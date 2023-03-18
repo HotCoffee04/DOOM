@@ -61,8 +61,8 @@ ticcmd_t	localcmds[BACKUPTICS];
 
 ticcmd_t        netcmds[MAXPLAYERS][BACKUPTICS];
 int         	nettics[MAXNETNODES];
-boolean		nodeingame[MAXNETNODES];		// set false as nodes leave game
-boolean		remoteresend[MAXNETNODES];		// set when local needs tics
+d_boolean		nodeingame[MAXNETNODES];		// set false as nodes leave game
+d_boolean		remoteresend[MAXNETNODES];		// set when local needs tics
 int		resendto[MAXNETNODES];			// set when remote needs tics
 int		resendcount[MAXNETNODES];
 
@@ -79,7 +79,7 @@ void D_ProcessEvents (void);
 void G_BuildTiccmd (ticcmd_t *cmd); 
 void D_DoAdvanceDemo (void);
  
-boolean		reboundpacket;
+d_boolean		reboundpacket;
 doomdata_t	reboundstore;
 
 
@@ -189,7 +189,7 @@ HSendPacket
 // HGetPacket
 // Returns false if no packet is waiting
 //
-boolean HGetPacket (void)
+d_boolean HGetPacket (void)
 {	
     if (reboundpacket)
     {
@@ -476,7 +476,7 @@ void CheckAbort (void)
 void D_ArbitrateNetStart (void)
 {
     int		i;
-    boolean	gotinfo[MAXNETNODES];
+    d_boolean	gotinfo[MAXNETNODES];
 	
     autostart = true;
     memset (gotinfo,0,sizeof(gotinfo));
@@ -631,7 +631,7 @@ int	frameon;
 int	frameskip[4];
 int	oldnettics;
 
-extern	boolean	advancedemo;
+extern	d_boolean	advancedemo;
 
 void TryRunTics (void)
 {

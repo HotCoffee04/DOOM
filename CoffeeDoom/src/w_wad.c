@@ -26,7 +26,7 @@ static const char
 rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 
 
-#ifdef NORMALUNIX
+#ifdef LINUX
 #include <ctype.h>
 #include <sys/types.h>
 #include <string.h>
@@ -48,10 +48,12 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #endif
 #include "w_wad.h"
 
+#include <malloc.h>
 
-
-
-
+#ifndef LINUX
+//substitues for unix function:
+#define strcasecmp(x,y) _stricmp(x,y)
+#endif
 
 //
 // GLOBALS
@@ -64,7 +66,6 @@ int			numlumps;
 void**			lumpcache;
 
 
-#define strcmpi	strcasecmp
 
 void strupr (char* s)
 {
@@ -73,12 +74,12 @@ void strupr (char* s)
 
 int filelength (int handle) 
 { 
-    struct stat	fileinfo;
+    //struct stat	fileinfo;
     
-    if (fstat (handle,&fileinfo) == -1)
-	I_Error ("Error fstating");
+    //if (fstat (handle,&fileinfo) == -1)
+	//I_Error ("Error fstating");
 
-    return fileinfo.st_size;
+    //return fileinfo.st_size;
 }
 
 

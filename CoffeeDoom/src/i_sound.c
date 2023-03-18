@@ -30,12 +30,12 @@ rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
 
 #include <math.h>
 
-#include <sys/time.h>
+
 #include <sys/types.h>
 
 #include <fcntl.h>
-#include <unistd.h>
-#include <sys/ioctl.h>
+
+
 
 // Timer stuff. Experimental.
 #include <time.h>
@@ -140,11 +140,11 @@ I_StartSound
   if(id == sfx_sawful || id == sfx_sawidl){ //if it's the saw sound we just load a forth of the data for some reasons beyond my understanding
 
     cpoint->chunk->alen = W_LumpLength(S_sfx[id].lumpnum) / 4;
-    cpoint->chunk->abuf = (W_CacheLumpNum(S_sfx[id].lumpnum,PU_CACHE) + 32); 
+    cpoint->chunk->abuf = ((Uint8*)W_CacheLumpNum(S_sfx[id].lumpnum,PU_CACHE) + 32);
 
 
   }else{
-    cpoint->chunk->abuf = (W_CacheLumpNum(S_sfx[id].lumpnum,PU_CACHE) + 32); 
+    cpoint->chunk->abuf = ((Uint8*)W_CacheLumpNum(S_sfx[id].lumpnum,PU_CACHE) + 32);
     cpoint->chunk->alen = W_LumpLength(S_sfx[id].lumpnum) - 32;
   }
 

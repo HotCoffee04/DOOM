@@ -29,8 +29,9 @@ rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 #include <string.h>
 
 #include <stdarg.h>
-#include <sys/time.h>
-#include <unistd.h>
+
+#include <Windows.h>
+#include <time.h>
 
 #include "doomdef.h"
 #include "m_misc.h"
@@ -88,14 +89,23 @@ byte* I_ZoneBase (int*	size)
 int  I_GetTime (void)
 {
     struct timeval	tp;
-    struct timezone	tzp;
+
     int			newtics;
-    static int		basetime=0;
-  
+    static int		basetime = 0;
+
+#ifdef LINUX
+    struct timezone	tzp;
     gettimeofday(&tp, &tzp);
+#else
+    tp.tv_sec = clock() / CLOCKS_PER_SEC;
+    tp.tv_usec = clock() * 1000 - (clock() / CLOCKS_PER_SEC) * 1000 * 1000;
+#endif
+
+
+
     if (!basetime)
-	basetime = tp.tv_sec;
-    newtics = (tp.tv_sec-basetime)*TICRATE + tp.tv_usec*TICRATE/1000000;
+        basetime = tp.tv_sec;
+    newtics = (tp.tv_sec - basetime) * TICRATE + tp.tv_usec * TICRATE / 1000000;
     return newtics;
 }
 
@@ -125,15 +135,13 @@ void I_Quit (void)
 
 void I_WaitVBL(int count)
 {
-#ifdef SGI
-    sginap(1);                                           
+
+#ifdef LINUX
+    usleep(count * (1000000 / 70));
 #else
-#ifdef SUN
-    sleep(0);
-#else
-    usleep (count * (1000000/70) );                                
+    Sleep(count * (1000000/70) );                                
 #endif
-#endif
+
 }
 
 void I_BeginRead(void)
@@ -157,7 +165,7 @@ byte*	I_AllocLow(int length)
 //
 // I_Error
 //
-extern boolean demorecording;
+extern d_boolean demorecording;
 
 void I_Error (char *error, ...)
 {

@@ -107,7 +107,7 @@ R_InstallSpriteLump
 ( int		lump,
   unsigned	frame,
   unsigned	rotation,
-  boolean	flipped )
+  d_boolean	flipped )
 {
     int		r;
 	
@@ -188,8 +188,12 @@ void R_InitSpriteDefs (char** namelist)
 		
     // count the number of sprite names
     check = namelist;
-    while (*check != NULL)
-	check++;
+    int k = 0;
+    while (*check != NULL && k < NUMSPRITES) {
+        k++;
+        check++;
+
+    }
 
     numsprites = check-namelist;
 	
@@ -470,7 +474,7 @@ void R_ProjectSprite (mobj_t* thing)
     int			lump;
     
     unsigned		rot;
-    boolean		flip;
+    d_boolean		flip;
     
     int			index;
 
@@ -522,13 +526,13 @@ void R_ProjectSprite (mobj_t* thing)
 	ang = R_PointToAngle (thing->x, thing->y);
 	rot = (ang-thing->angle+(unsigned)(ANG45/2)*9)>>29;
 	lump = sprframe->lump[rot];
-	flip = (boolean)sprframe->flip[rot];
+	flip = (d_boolean)sprframe->flip[rot];
     }
     else
     {
 	// use single rotation for all views
 	lump = sprframe->lump[0];
-	flip = (boolean)sprframe->flip[0];
+	flip = (d_boolean)sprframe->flip[0];
     }
     
     // calculate edges of the shape
@@ -651,7 +655,7 @@ void R_DrawPSprite (pspdef_t* psp)
     spritedef_t*	sprdef;
     spriteframe_t*	sprframe;
     int			lump;
-    boolean		flip;
+    d_boolean		flip;
     vissprite_t*	vis;
     vissprite_t		avis;
     
@@ -670,7 +674,7 @@ void R_DrawPSprite (pspdef_t* psp)
     sprframe = &sprdef->spriteframes[ psp->state->frame & FF_FRAMEMASK ];
 
     lump = sprframe->lump[0];
-    flip = (boolean)sprframe->flip[0];
+    flip = (d_boolean)sprframe->flip[0];
     
     // calculate edges of the shape
     tx = psp->sx-160*FRACUNIT;
@@ -789,7 +793,7 @@ void R_SortVisSprites (void)
     int			i;
     int			count;
     vissprite_t*	ds;
-    vissprite_t*	best;
+    vissprite_t*	best = 0;
     vissprite_t		unsorted;
     fixed_t		bestscale;
 

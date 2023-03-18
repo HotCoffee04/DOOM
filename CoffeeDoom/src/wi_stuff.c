@@ -411,7 +411,7 @@ void WI_slamBackground(void)
 
 // The ticker is used to detect keys
 //  because of timing issues in netgames.
-boolean WI_Responder(event_t* ev)
+d_boolean WI_Responder(event_t* ev)
 {
     return false;
 }
@@ -463,7 +463,7 @@ WI_drawOnLnode
     int		top;
     int		right;
     int		bottom;
-    boolean	fits = false;
+    d_boolean	fits = false;
 
     i = 0;
     do
@@ -746,7 +746,7 @@ void WI_updateNoState(void) {
 
 }
 
-static boolean		snl_pointeron = false;
+static d_boolean		snl_pointeron = false;
 
 
 void WI_initShowNextLoc(void)
@@ -881,7 +881,7 @@ void WI_updateDeathmatchStats(void)
     int		i;
     int		j;
     
-    boolean	stillticking;
+    d_boolean	stillticking;
 
     WI_updateAnimatedBack();
 
@@ -1109,7 +1109,7 @@ void WI_updateNetgameStats(void)
     int		i;
     int		fsum;
     
-    boolean	stillticking;
+    d_boolean	stillticking;
 
     WI_updateAnimatedBack();
 

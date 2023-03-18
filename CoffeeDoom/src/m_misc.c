@@ -31,7 +31,7 @@ rcsid[] = "$Id: m_misc.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
 #include <sys/types.h>
 #include <fcntl.h>
 #include <stdlib.h>
-#include <unistd.h>
+
 
 #include <ctype.h>
 
@@ -70,7 +70,7 @@ int
 M_DrawText
 ( int		x,
   int		y,
-  boolean	direct,
+  d_boolean	direct,
   char*		string )
 {
     int 	c;
@@ -109,7 +109,7 @@ M_DrawText
 #define O_BINARY 0
 #endif
 
-boolean
+d_boolean
 M_WriteFile
 ( char const*	name,
   void*		source,
@@ -340,7 +340,7 @@ void M_LoadDefaults (void)
     char	strparm[100];
     char*	newstring;
     int		parm;
-    boolean	isstring;
+    d_boolean	isstring;
     
     // set everything to base values
     numdefaults = sizeof(defaults)/sizeof(defaults[0]);
