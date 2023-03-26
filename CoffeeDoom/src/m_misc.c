@@ -115,16 +115,19 @@ M_WriteFile
   void*		source,
   int		length )
 {
-    int		handle;
+    FILE		*handle;
     int		count;
 	
-    handle = open ( name, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0666);
+
+    //handle = open ( name, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0666);
+    handle = fopen(name, "wb");
 
     if (handle == -1)
 	return false;
 
-    count = write (handle, source, length);
-    close (handle);
+    //count = write (handle, source, length);
+    count = fwrite(source, 1, length, handle);
+    fclose (handle);
 	
     if (count < length)
 	return false;
@@ -141,19 +144,17 @@ M_ReadFile
 ( char const*	name,
   byte**	buffer )
 {
-    int	handle, count, length;
-    struct stat	fileinfo;
+    FILE* handle;
+    int count, length;
     byte		*buf;
 	
-    handle = open (name, O_RDONLY | O_BINARY, 0666);
-    if (handle == -1)
+    handle = fopen(name, "rb");
+    if (handle == 0)
 	I_Error ("Couldn't read file %s", name);
-    if (fstat (handle,&fileinfo) == -1)
-	I_Error ("Couldn't read file %s", name);
-    length = fileinfo.st_size;
+    length = d_filelength(handle);
     buf = Z_Malloc (length, PU_STATIC, NULL);
-    count = read (handle, buf, length);
-    close (handle);
+    count = fread(buf, 1, length, handle);
+    fclose (handle);
 	
     if (count < length)
 	I_Error ("Couldn't read file %s", name);
@@ -511,7 +512,7 @@ void M_ScreenShot (void)
     {
 	lbmname[4] = i/10 + '0';
 	lbmname[5] = i%10 + '0';
-	if (access(lbmname,0) == -1)
+	if (_access(lbmname,0) == -1)
 	    break;	// file doesn't exist
     }
     if (i==100)

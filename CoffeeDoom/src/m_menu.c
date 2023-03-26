@@ -510,7 +510,7 @@ menu_t  SaveDef =
 //
 void M_ReadSaveStrings(void)
 {
-    int             handle;
+    FILE             *handle;
     int             count;
     int             i;
     char    name[256];
@@ -522,15 +522,17 @@ void M_ReadSaveStrings(void)
 	else
 	    sprintf(name,SAVEGAMENAME"%d.dsg",i);
 
-	handle = open (name, O_RDONLY | 0, 0666);
-	if (handle == -1)
+	handle = fopen(name, "r");
+	
+	if (handle == 0)
 	{
 	    strcpy(&savegamestrings[i][0],EMPTYSTRING);
 	    LoadMenu[i].status = 0;
 	    continue;
 	}
-	count = read (handle, &savegamestrings[i], SAVESTRINGSIZE);
-	close (handle);
+
+	count = fread(&savegamestrings[i], 1, SAVESTRINGSIZE, handle);
+	fclose(handle);
 	LoadMenu[i].status = 1;
     }
 }

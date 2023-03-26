@@ -57,9 +57,7 @@ typedef unsigned char byte;
 
 // Substitutes for unix header defines:
 #define	R_OK	4		/* Test for read permission.  */
-#define O_RDONLY	0
-#define O_WRONLY	1
-#define	O_BINARY	0x8000
+
 #endif
 //-----------------------------------------------------------------------------
 //
