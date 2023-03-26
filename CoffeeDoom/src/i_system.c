@@ -139,7 +139,7 @@ void I_WaitVBL(int count)
 #ifdef LINUX
     usleep(count * (1000000 / 70));
 #else
-    Sleep(count * (1000000/70) );                                
+    Sleep(1000);
 #endif
 
 }
