@@ -522,7 +522,7 @@ void M_ReadSaveStrings(void)
 	else
 	    sprintf(name,SAVEGAMENAME"%d.dsg",i);
 
-	handle = fopen(name, "r");
+	handle = fopen(name, "rb");
 	
 	if (handle == 0)
 	{

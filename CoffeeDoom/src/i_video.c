@@ -26,8 +26,8 @@ rcsid[] = "$Id: i_x.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
 
 #include <stdlib.h>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 
 #include <stdarg.h>
 #include <sys/types.h>
@@ -54,14 +54,12 @@ SDL_Palette *sdlPalette;
 
 int lastMouseX,lastMouseY;
 
-int modernControls;
 float forcedRatio;
 float ratio;
 float winScale;
 int yoffset;
 int xoffset;
 SDL_Rect imgRect;
-int drawBlocks;
 
 void resizedWindow(){
 
@@ -100,19 +98,6 @@ void resizedWindow(){
 }
 
 int SdlKeyToDoomKey(SDL_Keysym key){
-
-	if(modernControls){
-		switch(key.scancode){
-			case SDL_SCANCODE_W: return KEY_UPARROW;
-			case SDL_SCANCODE_S: return KEY_DOWNARROW;
-			case SDL_SCANCODE_A: return ',';
-			case SDL_SCANCODE_D: return '.';
-
-			default: break;
-		}
-
-	}
-
 
 	switch(key.scancode){
 
@@ -178,10 +163,7 @@ void I_InitGraphics(void)
 	//texture = SDL_CreateTexture(rend,SDL_PIXELFORMAT_RGB332,SDL_TEXTUREACCESS_STREAMING,SCREENWIDTH,SCREENHEIGHT);
 	surface = SDL_CreateRGBSurface(0,SCREENWIDTH,SCREENHEIGHT,8,0,0,0,0);
 
-	modernControls = 1;
-	drawBlocks = 0;
-    if (M_CheckParm("-nctrls"))
-		modernControls = 0;
+
 
 	//runs doom with a stretched 4:3 aspect ratio like the one monitors had in the 90s
     if (M_CheckParm("-stretch"))
@@ -247,9 +229,7 @@ void I_StartTic (void)
         break;
  
         case SDL_KEYDOWN:
-			if(sdlEvent.key.keysym.scancode == SDL_SCANCODE_B){
-				drawBlocks = !drawBlocks;
-			}
+
 			doomEvent.type = ev_keydown;
 			doomEvent.data1 = SdlKeyToDoomKey(sdlEvent.key.keysym);
 			doomEvent.data2 = doomEvent.data3 = 0;
@@ -264,7 +244,6 @@ void I_StartTic (void)
 			D_PostEvent(&doomEvent);
 		break;
 		case SDL_MOUSEBUTTONDOWN:
-			if(!modernControls) break;
 			doomEvent.type = ev_keydown;
 			doomEvent.data1 = KEY_RCTRL;
 			doomEvent.data2 = doomEvent.data3 = 0;
@@ -272,7 +251,6 @@ void I_StartTic (void)
 
 		break;
 		case SDL_MOUSEBUTTONUP:
-			if(!modernControls) break;
 			doomEvent.type = ev_keyup;
 			doomEvent.data1 = KEY_RCTRL;
 			doomEvent.data2 = doomEvent.data3 = 0;
@@ -283,7 +261,6 @@ void I_StartTic (void)
 			doomEvent.type = ev_mouse;
 
 			doomEvent.data2 = sdlEvent.motion.xrel * 30;
-			if(!modernControls)
 			doomEvent.data3 = sdlEvent.motion.yrel * 30;
 			doomEvent.data1 = 0;
 
@@ -357,11 +334,6 @@ void I_FinishUpdate (void)
 
 	SDL_DestroyTexture(texture);
 
-	if(drawBlocks){
-		SDL_SetRenderDrawColor(rend,52, 222, 235, SDL_ALPHA_OPAQUE);
-
-		SDL_SetRenderDrawColor(rend,0, 0, 0, SDL_ALPHA_OPAQUE);
-	}
 
 	SDL_RenderPresent(rend);
 
