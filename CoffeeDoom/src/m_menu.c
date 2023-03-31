@@ -502,7 +502,7 @@ menu_t  SaveDef =
     80,54,
     0
 };
-
+	
 
 //
 // M_ReadSaveStrings
